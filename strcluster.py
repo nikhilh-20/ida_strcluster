@@ -13,6 +13,7 @@ import idautils
 import idc
 import idaapi
 from idaapi import PluginForm
+from ida_kernwin import jumpto
 
 import time
 
@@ -123,8 +124,8 @@ class StringClusterMap(PluginForm):
 			for fs_ea in s_xrefs_eas:
 				dprint("looking for function of %x" %(fs_ea))
 
-				f_name = idc.GetFunctionName(fs_ea)
-				f_ea = idc.GetFunctionAttr(fs_ea, idc.FUNCATTR_START)
+				f_name = idc.get_func_name(fs_ea)
+				f_ea = idc.get_func_attr(fs_ea, idc.FUNCATTR_START)
 				if not f_name or f_name == '': f_name = NO_FUNC
 				if f_ea in res:
 					res[f_ea]['strings'][s_v] = IdaString(s_v, s_ea, fs_ea)
@@ -216,7 +217,7 @@ class StringClusterMap(PluginForm):
 			return
 
 		if ea != -1:
-			idc.Jump(ea)
+			jumpto(ea)
 
 	def PopulateForm(self):
 		self.parent.setWindowIcon(self.getIcon())
